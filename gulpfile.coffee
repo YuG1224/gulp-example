@@ -4,6 +4,7 @@ uglify = require('gulp-uglify')
 stylus = require('gulp-stylus')
 minify = require('gulp-minify-css')
 clean = require('gulp-clean')
+nodemon = require('gulp-nodemon')
 src =
     app: './src/app.coffee'
     routes: './src/routes/*.coffee'
@@ -65,11 +66,21 @@ gulp.task 'watch', ->
 
 # ディレクトリを空にする。
 gulp.task 'clean', ->
-    gulp.src ['./public/*/*', './build/*/*']
+    gulp.src ['app.js', './routes/*', './public/*/*', './build/*/*']
         .pipe clean()
+    return
+
+# node を実行する。
+gulp.task 'nodemon', ->
+    nodemon
+        script: 'app.js'
+        env:
+            TZ: 'UTC'
+            NODE_ENV: 'development'
+    .on 'restart', ['coffee', 'stylus']
     return
 
 gulp.task 'default', ->
     # place code for your default task here
-    gulp.run 'clean', 'coffee', 'stylus', 'copy', 'watch'
+    gulp.run 'clean', 'coffee', 'stylus', 'copy', 'watch', 'nodemon'
     return

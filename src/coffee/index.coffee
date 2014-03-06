@@ -1,3 +1,2 @@
-$( ->
-    console.log('hoge')
-)
+$ ->
+    console.log new Date
